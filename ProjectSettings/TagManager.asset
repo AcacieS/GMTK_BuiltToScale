@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - box
+  - hand
+  - ShootP
+  - Logic
+  - wall
+  - knife
+  - coin
+  - spawnCoin
+  - tong
+  - deleteTong
   layers:
   - Default
   - TransparentFX
@@ -40,4 +50,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: back
+    uniqueID: 3641171939
+    locked: 0
+  - name: player
+    uniqueID: 2254699383
     locked: 0
