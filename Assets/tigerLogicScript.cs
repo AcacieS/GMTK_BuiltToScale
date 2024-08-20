@@ -7,11 +7,18 @@ public class tigerLogicScript : MonoBehaviour
     // Start is called before the first frame update
 
     public Animator anim;
-    private float timeAwake;
+    private float waitTime;
     private float timer;
     void Start()
     {
-        
+        anim = GameObject.Find("Tiger").GetComponent<Animator>();
+    }
+
+    private bool isAwake = false;
+
+    public bool shouldPlayerMove()
+    {
+        return !anim.GetCurrentAnimatorStateInfo(0).IsName("enemy_awake");
     }
 
     // Update is called once per frame
@@ -19,12 +26,26 @@ public class tigerLogicScript : MonoBehaviour
     {
 
         timer += Time.deltaTime;
-        if(timer>timeAwake){
+
+        if (timer < waitTime)
+        {
+            return;
+        }
+        else
+        {
             timer = 0;
-            anim.SetBool("isAwake",true);
+            waitTime = Random.Range(5, 10);
+        }
 
-        } 
-
-        
+        if (isAwake)
+        {
+            anim.SetBool("isAwake", false);
+            isAwake = false;
+        }
+        else
+        {
+            anim.SetBool("isAwake", true);
+            isAwake = true;
+        }
     }
 }
