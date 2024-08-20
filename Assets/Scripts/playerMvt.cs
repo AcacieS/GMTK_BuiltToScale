@@ -15,7 +15,7 @@ public class playerMvt : MonoBehaviour
     public SpawnCoinScript coinS;
     private Rigidbody2D body;
     public Animator anim;
-    
+
     private CircleCollider2D circleCol;
     private BoxCollider2D boxCol;
     private CapsuleCollider2D capCol;
@@ -33,21 +33,22 @@ public class playerMvt : MonoBehaviour
         capCol = GameObject.FindGameObjectWithTag("Player").GetComponent<CapsuleCollider2D>();
         body = GetComponent<Rigidbody2D>();
     }
-    
-   
+
+
     void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-        if (logic.getNumbLvl(1))
+        if (logic.getNumbLvl(2))
         {
             body.gravityScale = 0;
             Vector3 horizontal = new Vector3(Input.GetAxis("Horizontal") * speed, Input.GetAxis("Vertical") * speed, 0.0f);
             transform.position = transform.position + horizontal * Time.deltaTime;
             circleCol.enabled = true;
-            boxCol.size = new Vector2(boxCol.size.y,boxCol.size.y);
+            boxCol.size = new Vector2(boxCol.size.y, boxCol.size.y);
         }
-        else if(logic.getNumbLvl(0)){
-            
+        else if (logic.getNumbLvl(1))
+        {
+
             circleCol.enabled = false;
             boxCol.enabled = false;
             capCol.enabled = true;
@@ -55,17 +56,23 @@ public class playerMvt : MonoBehaviour
             bool fallingVelocity = body.velocity.y < 0f;
             anim.SetBool("isFalling", fallingVelocity);
             body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
-            if(body.velocity.y<-30){
-                anim.SetBool("isDeadFall",true);
-                body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y-0.5f);
+
+            if (body.velocity.y < -25)
+            {
+                anim.SetBool("isDeadFall", true);
+                body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y - 0.5f);
             }
-        }else if(logic.getNumbLvl(2)){
-            boxCol.size = new Vector2(3,boxCol.size.y);
+        }
+        else if (logic.getNumbLvl(3))
+        {
+            boxCol.size = new Vector2(3, boxCol.size.y);
             circleCol.enabled = false;
             boxCol.enabled = true;
             body.gravityScale = 1;
             body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
-        }else{
+        }
+        else
+        {
 
         }
         if (horizontalInput > 0.01f)
@@ -80,41 +87,48 @@ public class playerMvt : MonoBehaviour
         //Vector3 horizontal = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
         //transform.position = transform.position + horizontal * Time.deltaTime;
     }
-    
-    void OnTriggerEnter2D(Collider2D col){
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
         if (col.gameObject.tag == "knife")
         {
             Destroy(gameObject);
             logic.gameOver("player_balloonEndState");
-        }else if(col.gameObject.tag == "coin"){
+        }
+        else if (col.gameObject.tag == "coin")
+        {
             Destroy(col.gameObject);
             logic.addCoin();
             SoundManagerScript.instance.PlaySound(coinSound);
-            logic.lvlCoin ++;
+            logic.lvlCoin++;
             coinS.isCoin = false;
-        }else if(col.gameObject.tag=="gameOverBar"){
-            Debug.Log("End");
-            logic.nextLvl();
-        }else if(col.gameObject.tag=="endWall"){
-            Debug.Log("???");
-            logic.nextLvl();
+        }
+         else if (col.gameObject.tag == "gameOverBar")
+        {
+            logic.addNumbLvl();
+            
+        }
+        else if (col.gameObject.tag == "endWall")
+        {
+            logic.addNumbLvl();
+            StartCoroutine(logic.NewScene(logic.thirdScene, logic.lvl3Scene, logic.timeScene));
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision){
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
         Debug.Log(collision.collider.tag);
-        if(collision.collider.tag == "tong"){
+        if (collision.collider.tag == "tong")
+        {
             SoundManagerScript.instance.PlaySound(jumpSound);
             gameObject.GetComponent<Rigidbody2D>().velocity = gameObject.transform.up * velocityJump;
         }
-        if(collision.collider.tag == "endG"&&anim.GetBool("isDeadFall")==true){
+        else if (collision.collider.tag == "endG" && anim.GetBool("isDeadFall") == true)
+        {
             //logic.gameOver("player_cEndState");
             anim.SetBool("isDead", true);
             string currentSceneName = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(currentSceneName);
-        }else if(collision.gameObject.tag=="endWall"){
-            Debug.Log("???");
-            logic.nextLvl();
         }
-        
+
     }
 }

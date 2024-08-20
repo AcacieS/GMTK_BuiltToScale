@@ -22,11 +22,11 @@ public class cameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (logic.getNumbLvl(1))
+        if (logic.getNumbLvl(2))
         {
             camera.transform.position = new Vector3(1.200001f, -2.2f, -10f);
         }
-        else if (logic.getNumbLvl(0))
+        else if (logic.getNumbLvl(1))
         {
             
             float cameraY = player.transform.position.y;
@@ -38,7 +38,7 @@ public class cameraScript : MonoBehaviour
             }*/
             camera.transform.position = new Vector3(1.200001f, cameraY, -10f);
         }
-        else if (logic.getNumbLvl(2))
+        else if (logic.getNumbLvl(3))
         {
             float cameraX = player.transform.position.x;
             if (cameraX < limitCameraF.position.x)

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: c8e41571324e4544f833fa846cf610b0
+  - enabled: 1
     path: Assets/Scenes/jump_scene.unity
     guid: 9e74f5dd22b664746b0ac6c75b9aaeab
   - enabled: 1
@@ -14,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/123soleil_scene.unity
     guid: e268743050f3cd046a4e9fa3e752157c
+  - enabled: 1
+    path: Assets/2d-with-depth-and-jump/Assets/Scenes/SampleScene.unity
+    guid: 558f5fc234f0620479cd106779286828
   m_configObjects: {}
