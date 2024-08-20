@@ -13,7 +13,7 @@ public class deleteTongScript : MonoBehaviour
         spawnTong = GameObject.Find("SpawnTong").GetComponent<SpawnTongScript>();
     }
     void Update(){
-        transform.position = new Vector3(transform.position.x, player.transform.position.y-17.5f, transform.position.z);
+        transform.position = new Vector3(transform.position.x, player.transform.position.y-20f, transform.position.z);
     }
     // Update is called once per frame
 
@@ -22,6 +22,8 @@ public class deleteTongScript : MonoBehaviour
             Destroy(col.gameObject);
             spawnTong.numbTong--;
             //spawnTong.cloneTongs.RemoveAt(0);
+        }else if(col.gameObject.tag=="coin"){
+            Destroy(col.gameObject);
         }
     }
 }

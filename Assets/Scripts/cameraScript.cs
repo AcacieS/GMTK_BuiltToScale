@@ -9,8 +9,10 @@ public class cameraScript : MonoBehaviour
     public logicScript logic;
     public Camera camera;
     public GameObject player;
+    private float posY;
     public Transform limitCameraF;
     public Transform limitCameraS;
+    public spawnBGScript spawnBG;
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<logicScript>();
@@ -20,20 +22,23 @@ public class cameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (logic.numbLvl == 0)
+        if (logic.getNumbLvl(1))
         {
             camera.transform.position = new Vector3(1.200001f, -2.2f, -10f);
         }
-        else if (logic.numbLvl == 1)
+        else if (logic.getNumbLvl(0))
         {
+            
             float cameraY = player.transform.position.y;
             if (cameraY < -2.2f)
             {
                 cameraY = -2.2f;
-            }
+            }/*else if(cameraY>spawnBG.posY+spawnBG.posY/2){
+                cameraY = spawnBG.posY+spawnBG.posY/2;
+            }*/
             camera.transform.position = new Vector3(1.200001f, cameraY, -10f);
         }
-        else if (logic.numbLvl == 2)
+        else if (logic.getNumbLvl(2))
         {
             float cameraX = player.transform.position.x;
             if (cameraX < limitCameraF.position.x)

@@ -19,7 +19,7 @@ public class SpawnCoinScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(logic.numbLvl==0){
+        if(logic.getNumbLvl(1)){
             Debug.Log("hey?");
             if(isCoin==false){
                 float coinPosY = Random.Range(-15.5f,10.5f);
@@ -27,8 +27,6 @@ public class SpawnCoinScript : MonoBehaviour
                 addCoin(coinPosY, coinPosX);
                 isCoin=true;
             }
-        }else if(logic.numbLvl==1){
-            
         }
     }
     public void addCoin(float coinPosX, float coinPosY){
