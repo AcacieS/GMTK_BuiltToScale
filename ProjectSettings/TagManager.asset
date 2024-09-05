@@ -16,8 +16,15 @@ TagManager:
   - deleteTong
   - endG
   - fish
-  - gameOverBar
   - endWall
+  - Ground
+  - tiger
+  - tigerLogic
+  - coinT
+  - limitTop
+  - cloud
+  - tuto
+  - npc
   layers:
   - Default
   - TransparentFX
@@ -60,4 +67,7 @@ TagManager:
     locked: 0
   - name: player
     uniqueID: 2254699383
+    locked: 0
+  - name: foreG
+    uniqueID: 2378943579
     locked: 0

@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading;
-using Unity.VisualScripting;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,44 +33,61 @@ public class playerMvt : MonoBehaviour
 
     void Update()
     {
+        float playerVelocity = body.velocity.y;
         float horizontalInput = Input.GetAxis("Horizontal");
-        if (logic.getNumbLvl(2))
+        
+        if (logic.getNumbLvl(1)) //jump
         {
-            body.gravityScale = 0;
-            Vector3 horizontal = new Vector3(Input.GetAxis("Horizontal") * speed, Input.GetAxis("Vertical") * speed, 0.0f);
-            transform.position = transform.position + horizontal * Time.deltaTime;
-            circleCol.enabled = true;
-            boxCol.size = new Vector2(boxCol.size.y, boxCol.size.y);
-        }
-        else if (logic.getNumbLvl(1))
-        {
-
+            Debug.Log("???");
+            //collider
             circleCol.enabled = false;
             boxCol.enabled = false;
             capCol.enabled = true;
+
             body.gravityScale = 1;
+
+            //movement
             bool fallingVelocity = body.velocity.y < 0f;
             anim.SetBool("isFalling", fallingVelocity);
-            body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
-
-            if (body.velocity.y < -25)
+            
+            //dying & movement
+           
+            if (playerVelocity < -25)
             {
+                Debug.Log("sadaf");
                 anim.SetBool("isDeadFall", true);
-                body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y - 0.5f);
+                playerVelocity-=0.5f;
             }
+            body.velocity = new Vector2(horizontalInput * speed, playerVelocity);
         }
-        else if (logic.getNumbLvl(3))
+        else if (logic.getNumbLvl(2)) //balloon
         {
+            Debug.Log("aaaaa");
+            //collider
+            circleCol.enabled = true;
+            circleCol.radius=2.634082f;
+            boxCol.size = new Vector2(boxCol.size.y, boxCol.size.y);
+
+            body.gravityScale = 0;
+
+            //movement
+            Vector3 horizontal = new Vector3(horizontalInput * speed, Input.GetAxis("Vertical") * speed, 0.0f);
+            transform.position = transform.position + horizontal * Time.deltaTime;
+        }
+        
+        else if (logic.getNumbLvl(3)) //lion
+        {
+            //collider
             boxCol.size = new Vector2(3, boxCol.size.y);
             circleCol.enabled = false;
             boxCol.enabled = true;
-            body.gravityScale = 1;
-            body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
-        }
-        else
-        {
 
+            body.gravityScale = 1;
+
+            //movement
+            body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
         }
+
         if (horizontalInput > 0.01f)
         {
             transform.localScale = new Vector3(1, 1, 1);
@@ -90,41 +103,36 @@ public class playerMvt : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "knife")
-        {
-            Destroy(gameObject);
-            logic.gameOver("player_balloonEndState");
-        }
-        else if (col.gameObject.tag == "coin")
+        //coin
+        if (col.gameObject.tag == "coin")
         {
             Destroy(col.gameObject);
             logic.addCoin();
             SoundManagerScript.instance.PlaySound(coinSound);
-            logic.lvlCoin++;
             coinS.isCoin = false;
         }
-         else if (col.gameObject.tag == "gameOverBar")
+
+        //dying balloon
+        if (col.gameObject.tag == "knife") 
         {
-            logic.addNumbLvl();
-            
+            anim.SetBool("isDead", true);
         }
+        //winning for jump and lion
         else if (col.gameObject.tag == "endWall")
         {
             logic.addNumbLvl();
-            StartCoroutine(logic.NewScene(logic.thirdScene, logic.lvl3Scene, logic.timeScene));
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log(collision.collider.tag);
-        if (collision.collider.tag == "tong")
+        if (col.collider.tag == "tong") //jump
         {
+            Debug.Log("Jumped");
             SoundManagerScript.instance.PlaySound(jumpSound);
             gameObject.GetComponent<Rigidbody2D>().velocity = gameObject.transform.up * velocityJump;
         }
-        else if (collision.collider.tag == "endG" && anim.GetBool("isDeadFall") == true)
+        else if (col.collider.tag == "endG" && anim.GetBool("isDeadFall") == true) //dying jump
         {
-            //logic.gameOver("player_cEndState");
             anim.SetBool("isDead", true);
             string currentSceneName = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(currentSceneName);
